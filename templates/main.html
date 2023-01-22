@@ -3,32 +3,38 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-    
-    <title>Chart.js</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='tr.css')}}">
+    <title>CSV Viewer</title>
 </head>
 <body>
- 
-        <form action = "/s" method="POST">
-        <select class="text-muted" name="pref" style="font-size:14px;">
-          
-               <option value = "1" selected>1</option>
-            
-        </select>
-        <input name = "linkPref" type= "submit"></input>
-        </form>
-        
-        <br>
-    <div style="width:50%;">
-        <canvas id="myChart" width="200px" height="200px"></canvas>
-        
-    </div>
-
-    <form action = '/u' method="POST">
-        <label>開始日<input type="date" name='from' value="2023-01-20"></label>
-        <label>締切日<input type="date" name="to"></label>
-        <button type="submit" class="btn btn-primary">送信</button>
+    <form action = "{{ url_for('view') }}" method="POST" enctype="multipart/form-data">
+        <label for="'rows">表示行数：</label>
+        <input type="text" id="rows" name="rows" size="10"> 
+        <br><br>
+        <input type="file" id="send_data" name="send_data">
+        <input type="submit" value="送信">
     </form>
+    <br>
+    <div>
+        <table border="2">
+        <th>行数</th>
+        {% if headers %}
+        {% for h in headers %}
+        <th>{{h}}</th>
+        {% endfor %}
+        {% endif %}
+        {% if result %}
+        {% for r in result %}
+        <tr>
+            <td>{{loop.index}}</td>
+            {% for elem in r %}
+            <td>{{elem}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+        {% endif %}
+    </div>
     
 </body>
 </html>
